@@ -1,5 +1,5 @@
 --Project Name: Extreme Mafia
---Authors: Tristan Jay, Max Stevenson, Jesse Wood
+--Authors: Tristan Jay, Max Stephenson, Jesse Wood
 --Class: CS 371
 --Instructor: ?
 --Due Date: December 1, 2019
@@ -74,10 +74,12 @@ function loginView:create( event )
 	self.passwordBox = passwordBox
 	sceneGroup:insert(passwordBox)
 
-	local function login()
-		Runtime:dispatchEvent({name = "login",
-		username = self.usernameBox.text,
-		password = self.passwordBox.text})
+	local function login(event)
+		if (event.phase == "ended") then
+			Runtime:dispatchEvent({name = "login",
+			username = self.usernameBox.text,
+			password = self.passwordBox.text})
+		end
 	end
 
 	local loginButton = widget.newButton({
@@ -91,7 +93,7 @@ function loginView:create( event )
 		fontSize = 20,
 		fillColor = { default={1,0,0,1}, over={1,1,1,1} },
 		labelColor = { default={1,1,1,1}, over={1,0,0,1} },
-		onPress = login,
+		onEvent = login,
 	})
 	sceneGroup:insert(loginButton)
 end

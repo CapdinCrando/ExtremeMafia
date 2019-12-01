@@ -1,5 +1,5 @@
 --Project Name: Extreme Mafia
---Authors: Tristan Jay, Max Stevenson, Jesse Wood
+--Authors: Tristan Jay, Max Stephenson, Jesse Wood
 --Class: CS 371
 --Instructor: ?
 --Due Date: December 1, 2019
@@ -41,8 +41,8 @@ function mainView:create( event )
 	sceneGroup:insert(gameTitle2)
 
 	--Buttons
-	local function createGame()
-		Runtime:dispatchEvent({name = "createGame"})
+	local function createGame(event)
+		if (event.phase == "ended") then Runtime:dispatchEvent({name = "createGame"}) end
 	end
 
 	local createButton = widget.newButton({
@@ -56,7 +56,7 @@ function mainView:create( event )
 		fontSize = 20,
 		fillColor = { default={1,0,0,1}, over={1,1,1,1} },
 		labelColor = { default={1,1,1,1}, over={1,0,0,1} },
-		onPress = createGame,
+		onEvent = createGame,
 	})
 	sceneGroup:insert(createButton)
 
@@ -65,8 +65,8 @@ function mainView:create( event )
 	self.codeBox = codeBox
 	sceneGroup:insert(codeBox)
 
-	local function joinGame()
-		Runtime:dispatchEvent({name = "joinGame", gameCode = codeBox.text})
+	local function joinGame(event)
+		if (event.phase == "ended") then Runtime:dispatchEvent({name = "joinGame", gameCode = codeBox.text}) end
 	end
 
 	local joinButton = widget.newButton({
@@ -80,13 +80,13 @@ function mainView:create( event )
 		fontSize = 20,
 		fillColor = { default={1,0,0,1}, over={1,1,1,1} },
 		labelColor = { default={1,1,1,1}, over={1,0,0,1} },
-		onPress = joinGame,
+		onEvent = joinGame,
 	})
 	sceneGroup:insert(joinButton)
 
 	--Account Icon
-	local function accountScreen()
-		Runtime:dispatchEvent({name = "accountScreen"})
+	local function accountScreen(event)
+		if (event.phase == "ended") then Runtime:dispatchEvent({name = "accountScreen"}) end
 	end
 	local accountButton = widget.newButton({
 		id = "accountButton",
@@ -95,7 +95,7 @@ function mainView:create( event )
 		width = 40,
 		height = 40,
 		defaultFile = "accountIcon.png",
-		onPress = accountScreen,
+		onEvent = accountScreen,
 	})
 	sceneGroup:insert(accountButton)
 end

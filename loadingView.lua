@@ -1,5 +1,5 @@
 --Project Name: Extreme Mafia
---Authors: Tristan Jay, Max Stevenson, Jesse Wood
+--Authors: Tristan Jay, Max Stephenson, Jesse Wood
 --Class: CS 371
 --Instructor: ?
 --Due Date: December 1, 2019
