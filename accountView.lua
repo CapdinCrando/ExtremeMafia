@@ -1,5 +1,5 @@
 --Project Name: Extreme Mafia
---Authors: Tristan Jay, Max Stevenson, Jesse Wood
+--Authors: Tristan Jay, Max Stephenson, Jesse Wood
 --Class: CS 371
 --Instructor: ?
 --Due Date: December 1, 2019
@@ -62,8 +62,8 @@ function accountView:create( event )
 	sceneGroup:insert(lossesText)
 
 	--Logout Button
-	local function logout()
-		Runtime:dispatchEvent({name = "logout"})
+	local function logout(event)
+		if (event.phase == "ended") then Runtime:dispatchEvent({name = "logout"}) end
 	end
 	local logoutButton = widget.newButton({
 		id = "logoutButton",
@@ -76,13 +76,13 @@ function accountView:create( event )
 		fontSize = 20,
 		fillColor = { default={1,0,0,1}, over={1,1,1,1} },
 		labelColor = { default={1,1,1,1}, over={1,0,0,1} },
-		onPress = logout,
+		onEvent = logout,
 	})
 	sceneGroup:insert(logoutButton)
 	
 	--Leave game button 
-	local function leaveGame()
-		Runtime:dispatchEvent({name = "leaveGame"})
+	local function leaveGame(event)
+		if (event.phase == "ended") then Runtime:dispatchEvent({name = "leaveGame"}) end
 	end
 	local leaveButton = widget.newButton({
 		id = "leaveButton",
@@ -95,14 +95,14 @@ function accountView:create( event )
 		fontSize = 20,
 		fillColor = { default={1,0,0,1}, over={1,1,1,1} },
 		labelColor = { default={1,1,1,1}, over={1,0,0,1} },
-		onPress = leaveGame,
+		onEvent = leaveGame,
 	})
 	self.leaveButton = leaveButton
 	sceneGroup:insert(leaveButton)
 	
 	--Back Icon
-	local function back()
-		Runtime:dispatchEvent({name = "back"})
+	local function back(event)
+		if (event.phase == "ended") then Runtime:dispatchEvent({name = "back"}) end
 	end
 	local backButton = widget.newButton({
 		id = "backButton",
@@ -111,7 +111,7 @@ function accountView:create( event )
 		width = 40,
 		height = 40,
 		defaultFile = "backIcon.png",
-		onPress = back,
+		onEvent = back,
 	})
 	sceneGroup:insert(backButton)
 end
