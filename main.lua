@@ -10,39 +10,47 @@ local composer = require("composer")
 local Account = require("Account")
 local Game = require("Game")
 
-local function startup()
-	print("AHHHH?")
-	if(Account.validate()) then
-		print("AHHHH!")
-		Account.refreshData()
-		if(Account.hasGame()) then
-			Game.refreshData()
-			local phase = Game.getPhase()
-			if(phase == "lobby") then
-				composer.gotoScene("lobbyView")
-			elseif(phase == "active") then
-					composer.gotoScene("activeView")
-			elseif(phase == "votingView") then
-				composer.gotoScene("votingView")
-			end
-		else
-			composer.gotoScene("mainView")
+local function goToGame()
+	if(Account.hasGame()) then
+		Game.refreshData()
+		local phase = Game.getPhase()
+		if(phase == "lobby") then
+			composer.gotoScene("lobbyView")
+		elseif(phase == "active") then
+			composer.gotoScene("activeView")
+		elseif(phase == "votingView") then
+			composer.gotoScene("votingView")
 		end
 	else
-		print("lgoin!")
-		composer.gotoScene("loginView")
+		composer.gotoScene("mainView")
 	end
 end
 
 local function login(event)
 	if(Account.login(event.un, event.pw)) then
-		--Login successful
+		goToGame()
 	else
 		native.showAlert("Invalid login!", "Username or password is invalid!")
 	end
 end
 
+local function logout(event)
+	Account.logout()
+	composer.gotoScene("loginView")
+end
+
+local function startup()
+	if(Account.validate()) then
+		goToGame()
+		Account.refreshData()
+	else
+		composer.gotoScene("loginView")
+	end
+end
+
 Runtime:addEventListener("login", login)
+Runtime:addEventListener("logout", logout)
+Runtime:addEventListener("goToGame", goToGame)
 
 composer.gotoScene("loadingView")
 timer.performWithDelay(100, startup, 1)
