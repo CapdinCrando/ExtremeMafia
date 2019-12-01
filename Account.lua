@@ -4,61 +4,63 @@ local Server = require("Server")
 
 local accountFile = "Account.dat"
 
-Account = FileUtility.loadTable(accountFile)
+Account = {}
+Account.accountData = FileUtility.loadTable(accountFile)
 
 function Account.getUsername()
-	return Account.username
+	return Account.accountData.username
 end
 
-function Account.getDisplayname()
-	return Account.displayName
+function Account.getDisplayName()
+	return Account.accountData.displayName
+end
+
+function Account.refreshData()
+	local data = Server.getAccountData(Account.accountData.token)
+	if(data ~= nil) then
+		Account.accountData.displayName = data.displayName
+		Account.accountData.currentGame = data.currentGame
+		Account.accountData.wins = data.wins
+		Account.accountData.losses = data.losses
+		FileUtility.saveTable(Account.accountData, accountFile)
+	end
 end
 
 function Account.login(username, password)
 	local response = Server.login(username, password)
 	if(response ~= nil) then
-		Account.username = username
-		Account.token = response
-		FileUtility.saveTable(Account, accountFile)
+		Account.accountData.username = username
+		Account.accountData.token = response
+		Account.refreshData()
 		return true
 	end
 	return false
 end
 
 function Account.hasGame()
-	return Account.currentGame ~= nil
+	return Account.accountData.currentGame ~= ""
 end
 
 function Account.getToken()
-	return Account.token
+	return Account.accountData.token
 end
 
 function Account.getWins()
-	return Account.wins
+	return Account.accountData.wins
 end
 
 function Account.getLosses()
-	return Account.losses
+	return Account.accountData.losses
 end
 
 function Account.validate()
-	return Server.validate(Account.token)
-end
-
-function Account.refreshData()
-	local data = Server.getAccountData(Account.token)
-	if(data ~= nil) then
-		Account.displayName = data.displayName
-		Account.currentGame = data.currentGame
-		Account.wins = data.wins
-		Account.losses = data.losses
-	end
+	return Server.validate(Account.accountData.token)
 end
 
 function Account.logout()
-	Server.invalidate(Account.token)
-	Account = {}
-	FileUtility.saveTable(Account, accountFile)
+	Server.invalidate(Account.accountData.token)
+	Account.accountData = {}
+	FileUtility.saveTable(Account.accountData, accountFile)
 end
 
 return Account

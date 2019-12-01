@@ -90,7 +90,7 @@ function mainView:create( event )
 	end
 	local accountButton = widget.newButton({
 		id = "accountButton",
-		x = 20,
+		x = 40,
 		y = 20,
 		width = 40,
 		height = 40,
@@ -107,6 +107,7 @@ function mainView:show( event )
  
     if ( phase == "will" ) then
         -- Code here runs when the scene is still off screen (but is about to come on screen)
+        self.codeBox.isVisible = true
  
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
@@ -122,11 +123,11 @@ function mainView:hide( event )
  
     if ( phase == "will" ) then
 		-- Code here runs when the scene is on screen (but is about to go off screen)
-		self.un.text = ""
-		self.pw.text = ""
  
     elseif ( phase == "did" ) then
         -- Code here runs immediately after the scene goes entirely off screen
+		self.codeBox.text = ""
+        self.codeBox.isVisible = false
  
     end
 end

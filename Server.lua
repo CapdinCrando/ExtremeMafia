@@ -66,7 +66,7 @@ function Server.createToken(username)
 	
 	local token = {}
 	token.username = username
-	token.endTime = time
+	token.endTime = time + 86400
 	Server.tokens[uuid] = token
 	return uuid
 end
@@ -89,7 +89,7 @@ function Server.invalidate(token)
 	local t = Server.tokens[token]
 	if(t ~= nil) then
 		Server.accounts[t.username].token = ""
-		table.remove(Server.tokens, token)
+		Server.tokens[token] = nil
 	end
 end
 
@@ -111,7 +111,7 @@ function Server.validate(token)
 	if(t ~= nil) then
 		local time = os.time(os.date('*t'))
 		if(t.endTime > time) then
-			t.endTime = time
+			t.endTime = time + 86400
 			return true
 		end
 	end

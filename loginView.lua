@@ -58,7 +58,7 @@ function loginView:create( event )
 	sceneGroup:insert(usernameText)
 	local usernameBox = native.newTextField(display.contentWidth/2 + 40, 300, display.contentWidth - 125, 35)
 	usernameBox.inputType = "no-emoji"
-	self.un = usernameBox
+	self.usernameBox = usernameBox
 	sceneGroup:insert(usernameBox)
 
 	local passwordText = display.newText({
@@ -71,11 +71,13 @@ function loginView:create( event )
 	local passwordBox = native.newTextField(display.contentWidth/2 + 40, 350, display.contentWidth - 125, 35)
 	passwordBox.inputType = "no-emoji"
 	passwordBox.isSecure = true
-	self.pw = passwordBox
+	self.passwordBox = passwordBox
 	sceneGroup:insert(passwordBox)
 
 	local function login()
-		Runtime:dispatchEvent({name = "login", un = self.un.text, pw = self.pw.text})
+		Runtime:dispatchEvent({name = "login",
+		username = self.usernameBox.text,
+		password = self.passwordBox.text})
 	end
 
 	local loginButton = widget.newButton({
@@ -104,6 +106,8 @@ function loginView:show( event )
  
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
+        self.usernameBox.isVisible = true
+        self.passwordBox.isVisible = true
  
     end
 end
@@ -116,8 +120,10 @@ function loginView:hide( event )
  
     if ( phase == "will" ) then
 		-- Code here runs when the scene is on screen (but is about to go off screen)
-		self.un.text = ""
-		self.pw.text = ""
+		self.usernameBox.text = ""
+		self.passwordBox.text = ""
+        self.usernameBox.isVisible = false
+        self.passwordBox.isVisible = false
  
     elseif ( phase == "did" ) then
         -- Code here runs immediately after the scene goes entirely off screen

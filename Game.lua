@@ -5,15 +5,19 @@ Game = {}
 
 -- Retrieves and updates the game data
 function Game.refreshData()
-	--Account
+	Game.gameData = Server.getGameData(Account.getToken)
 end
 
 function Game.getGameTitle()
-	return self.title
+	return Game.gameData.title
 end
 
 function Game.getPlayers()
-	return self.players
+	return Game.gameData.players
+end
+
+function Game.getPhase()
+	return Game.gameData.currentPhase
 end
 
 function Game.useSpecial(targetName)
