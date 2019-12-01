@@ -6,6 +6,8 @@
 --File Name: Game.lua
 --Description:	Represents the game session. Used as an interface between
 --				the server and the app and holds game information locally.
+--Note: For the actual app, the Server class functions
+--		would be replaced with networking code.
 
 --Libraries
 local Account = require("Account")
