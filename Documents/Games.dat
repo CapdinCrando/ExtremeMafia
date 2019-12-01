@@ -1,0 +1,58 @@
+{
+  "ABCD":{
+    "players":{
+      "Max":{
+        "usedAbility":false,
+        "role":"",
+        "alive":true,
+        "vote":"",
+        "protected":false,
+        "displayName":"Max Stevenson"
+      },
+      "InigoMontoya":{
+        "usedAbility":false,
+        "role":"",
+        "alive":true,
+        "vote":"",
+        "protected":false,
+        "displayName":"Jesse Wood"
+      },
+      "CapdinCrando":{
+        "usedAbility":false,
+        "role":"",
+        "alive":true,
+        "vote":"",
+        "protected":false,
+        "displayName":"Tristan Jay"
+      },
+      "TeckArcher":{
+        "usedAbility":false,
+        "role":"",
+        "alive":true,
+        "vote":"",
+        "protected":false,
+        "displayName":"Eli Wright"
+      },
+    },
+    "deaths":{
+    },
+    "currentRound":0,
+    "neededVotes":3,
+    "currentPhase":"lobby",
+    "host":"CapdinCrando",
+    "title":"Demo Game",
+    "winner":"",
+    "timeRemaining":5,
+    "playerCount":4,
+    "settings":{
+      "activeMinutes":1,
+      "mafiaSuicide":true,
+      "votingMinutes":1,
+      "detectiveCount":1,
+      "assassinations":1,
+      "mafiaCount":1,
+      "roleReveal":true,
+      "doctorCount":1
+    }
+  }
+}
