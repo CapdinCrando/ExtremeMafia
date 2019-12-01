@@ -1,4 +1,5 @@
 local Account = require("Account")
+local Server = require("Server")
 
 Game = {}
 
@@ -15,12 +16,16 @@ function Game.getPlayers()
 	return self.players
 end
 
-function Game.useSpecial(playerName, targetName)
+function Game.useSpecial(targetName)
 	
 end
 
-function Game.playerDied(playerName)
-	--self.deaths.insert(playerName)
+function Game.died()
+	
+end
+
+function Game.joinGame(gameCode)
+
 end
 
 function Game.getPlayerRole(playerName)

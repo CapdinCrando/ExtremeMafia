@@ -52,5 +52,6 @@ Runtime:addEventListener("login", login)
 Runtime:addEventListener("logout", logout)
 Runtime:addEventListener("goToGame", goToGame)
 
-composer.gotoScene("loadingView")
-timer.performWithDelay(100, startup, 1)
+--composer.gotoScene("loadingView")
+--timer.performWithDelay(100, startup, 1)
+--composer.gotoScene("accountView")
