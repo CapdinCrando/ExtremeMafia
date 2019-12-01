@@ -19,13 +19,13 @@ function loginView:create( event )
 	local width = display.contentWidth - 20
 	local mafiaLogo = display.newImageRect("MafiaLogo.png", width, width/2)
 	mafiaLogo.x = display.contentCenterX
-	mafiaLogo.y = width/4
+	mafiaLogo.y = width/4 + 30
 	sceneGroup:insert(mafiaLogo)
 
 	--Game Title
 	local gameTitle1 = display.newText({
 		x = display.contentWidth/2 - 39,
-		y = width/2 + 20,
+		y = width/2 + 50,
 		text = "EXTREME",
 		fontSize = 24
 	})
@@ -33,7 +33,7 @@ function loginView:create( event )
 
 	local gameTitle2 = display.newText({
 		x = display.contentWidth/2 + 61,
-		y = width/2 + 20,
+		y = width/2 + 50,
 		text = "MAFIA",
 		fontSize = 24
 	})

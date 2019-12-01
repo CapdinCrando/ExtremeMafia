@@ -17,6 +17,7 @@ end
 function Account.login(username, password)
 	local response = Server.login(username, password)
 	if(response ~= nil) then
+		Account.username = username
 		Account.token = response
 		FileUtility.saveTable(Account, accountFile)
 		return true

@@ -8,14 +8,14 @@
 
 local composer = require( "composer" )
  
-local lobbyView = composer.newScene()
+local gameView = composer.newScene()
 
-function lobbyView:create( event )
+function gameView:create( event )
  
 	local sceneGroup = self.view
 end
 
-function lobbyView:show( event )
+function gameView:show( event )
  
     local sceneGroup = self.view
     local phase = event.phase
@@ -30,7 +30,7 @@ function lobbyView:show( event )
 end
 
 
-function lobbyView:hide( event )
+function gameView:hide( event )
  
     local sceneGroup = self.view
     local phase = event.phase
@@ -46,16 +46,16 @@ function lobbyView:hide( event )
     end
 end
 
-function lobbyView:destroy( event )
+function gameView:destroy( event )
  
     local sceneGroup = self.view
     -- Code here runs prior to the removal of scene's view
  
 end
 
-lobbyView:addEventListener( "create", lobbyView )
-lobbyView:addEventListener( "show", lobbyView )
-lobbyView:addEventListener( "hide", lobbyView )
-lobbyView:addEventListener( "destroy", lobbyView )
+gameView:addEventListener( "create", gameView )
+gameView:addEventListener( "show", gameView )
+gameView:addEventListener( "hide", gameView )
+gameView:addEventListener( "destroy", gameView )
  
-return lobbyView
+return gameView

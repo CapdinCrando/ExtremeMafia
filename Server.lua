@@ -9,7 +9,7 @@
 Server = {}
 
 Server.games = {
-	["example"] = {
+	["ABCD"] = {
 		title = "Demo Game",
 		currentRound = 2,
 		currentPhase = "active",
@@ -19,8 +19,8 @@ Server.games = {
 		playerCount = 4,
 		neededVotes = 3,
 		settings = {
-			activeMinutes = 5,
-			votingMinutes = 5,
+			activeMinutes = 1,
+			votingMinutes = 1,
 			mafiaCount = 1,
 			doctorCount = 1,
 			detectiveCount = 1,
@@ -134,7 +134,7 @@ end
 
 function Server.getGameData(token)
 	if(Server.validate(token)) then
-		return Server.games[Server.accounts[Server.tokens[token].username]].currentGame]
+		return Server.games[Server.accounts[Server.tokens[token].username].currentGame]
 	end
 	return nil
 end
@@ -148,7 +148,7 @@ function Server.createGame(token, t, gameSettings)
 		winner = "",
 		playerCount = 1,
 		host = "CapdinCrando",
-		settings = gameSettings
+		settings = gameSettings,
 		players = {},
 		deaths = {}
 	}
@@ -297,15 +297,21 @@ end
 function Server.joinGame(token, gameCode)
 	local username = Server.tokens[token].username
 	local game = Server.games[gameCode]
-	local p = {
-		displayName = Server.accounts[username].displayName,
-		role = "", alive = true, 
-		protected = false, 
-		vote = "",
-		usedAbility = false
-	}
-	game.players[username] = p
-	game.playerCount = game.playerCount + 1
+	if(game ~= nil) then
+		if(game.currentPhase == "lobby") then
+			local p = {
+				displayName = Server.accounts[username].displayName,
+				role = "", alive = true, 
+				protected = false, 
+				vote = "",
+				usedAbility = false
+			}
+			game.players[username] = p
+			game.playerCount = game.playerCount + 1
+			return true
+		end
+	end
+	return false
 end
 
 function Server.startGame(token)
@@ -317,7 +323,7 @@ function Server.startGame(token)
 		local doctor = game.settings.doctorCount
 		local detective = game.settings.detectiveCount
 		for k,v in pairs(game.players) do
-			while(v.role == "") then
+			while(v.role == "") do
 				local select = math.random(0, 2)
 				if(select == 0) then
 					if(mafia ~= 0) then
@@ -361,13 +367,13 @@ function Server.useSpecial(token, targetName)
 		local player = game.players[username]
 		local game = Server.games[Server.accounts[username].currentGame]
 		local role = game.players[username].role
-		if(!player.usedAbility) then
+		if(player.usedAbility == false) then
 			if(role == "doctor") then
 				game.players[targetName].protected = true
 				player.usedAbility = true
 			elseif(role == "detective") then
-				return game.players[targetName].role
 				player.usedAbility = true
+				return game.players[targetName].role
 			end
 		end
 	end
