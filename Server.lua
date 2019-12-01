@@ -6,52 +6,31 @@
 --File Name: Server.lua
 --Description:
 
+local FileUtility = require("FileUtility")
+
+local gameSave = "Games.dat"
+local accountSave = "Accounts.dat"
+local tokenSave = "Tokens.dat"
+
 Server = {}
 
-Server.games = {
-	["ABCD"] = {
-		title = "Demo Game",
-		currentRound = 2,
-		currentPhase = "active",
-		timeRemaining = 5,
-		host = "CapdinCrando",
-		winner = "",
-		playerCount = 4,
-		neededVotes = 3,
-		settings = {
-			activeMinutes = 1,
-			votingMinutes = 1,
-			mafiaCount = 1,
-			doctorCount = 1,
-			detectiveCount = 1,
-			assassinations = 1,
-			mafiaSuicide = true,
-			roleReveal = true
-		},
-		players = {
-			["CapdinCrando"] = {displayName = "Tristan Jay", role = "doctor", alive = true, protected = false, votes = 0, voted = false, usedAbility = false},
-			["Max"] = {displayName = "Max Stevenson", role = "citizen", alive = true, protected = false, votes = 0, voted = false, usedAbility = false},
-			["InigoMontoya"] = {displayName = "Jesse Wood", role = "mafia", alive = false, protected = true, votes = 0, voted = false, usedAbility = false},
-			["TeckArcher"] = {displayName = "Eli Wright", role = "detective", alive = true, protected = false, votes = 0, voted = false, usedAbility = true}
-		},
-		deaths = {
-			["TeckArcher"] = true
-		}
-	}
-}
+Server.games = FileUtility.loadTable(gameSave)
 
-Server.accounts = {
-	["CapdinCrando"] = {
-		displayName = "Tristan Jay",
-		password = "1234",
-		currentGame = "",
-		wins = "42",
-		losses = "0",
-		token = ""
-	},
-}
+Server.accounts = FileUtility.loadTable(accountSave)
 
-Server.tokens = {}
+Server.tokens = FileUtility.loadTable(tokenSave)
+
+function Server.saveGames()
+	FileUtility.saveTable(Server.games, gameSave)
+end
+
+function Server.saveAccount()
+	FileUtility.saveTable(Server.accounts, accountSave)
+end
+
+function Server.saveTokens()
+	FileUtility.saveTable(Server.tokens, tokenSave)
+end
 
 function Server.createToken(username)
 	local t = os.date('*t')
@@ -68,6 +47,9 @@ function Server.createToken(username)
 	token.username = username
 	token.endTime = time + 86400
 	Server.tokens[uuid] = token
+	Server.accounts[username].token = uuid
+	Server.saveTokens()
+	Server.saveAccount()
 	return uuid
 end
 
@@ -76,7 +58,13 @@ function Server.addAccount(username, password, displayName)
 	if(username ~= nil) then
 		if(password ~= nil) then
 			if(displayName ~= nil) then
-				if(self.accounts[username] == nil) then
+				if(Server.accounts[username] == nil) then
+					local account = Server.accounts[username]
+					account.username = username
+					account.password = password
+					account.displayName = displayName
+					account.wins = 0
+					account.losses = 0
 					return Server.createToken(username)
 				end
 			end
@@ -90,6 +78,8 @@ function Server.invalidate(token)
 	if(t ~= nil) then
 		Server.accounts[t.username].token = ""
 		Server.tokens[token] = nil
+		Server.saveTokens()
+		Server.saveAccount()
 	end
 end
 
@@ -112,6 +102,7 @@ function Server.validate(token)
 		local time = os.time(os.date('*t'))
 		if(t.endTime > time) then
 			t.endTime = time + 86400
+			Server.saveTokens()
 			return true
 		end
 	end
@@ -159,6 +150,8 @@ function Server.createGame(token, t, gameSettings)
 	end
 	game.neededVotes = needed
 	Server.games["DHZJ"] = game
+	Server.saveGames()
+	Server.saveAccount()
 	return "DHZJ" --Normally random generated
 end
 
@@ -184,6 +177,8 @@ function Server.winGame(game, winner)
 			end
 		end
 	end
+	Server.saveGames()
+	Server.saveAccount()
 end
 
 function Server.endRound(game)
@@ -247,16 +242,19 @@ function Server.endRound(game)
 		v.protected = false
 		v.vote = ""
 	end
+	Server.saveGames()
 end
 
 function Server.beginVoting(game)
 	game.currentPhase = "voting"
 	game.timeRemaining = game.settings.votingMinutes
+	Server.saveGames()
 end
 
 function Server.beginActive(game)
 	game.currentPhase = "active"
 	game.timeRemaining = game.settings.activeMinutes
+	Server.saveGames()
 end
 
 function gameTick(game)
@@ -276,6 +274,7 @@ function gameTick(game)
 			end
 		end
 	end
+	Server.saveGames()
 end
 
 function Server.vote(token, targetName)
@@ -288,6 +287,7 @@ function Server.vote(token, targetName)
 			if(targetName ~= username) then
 				if(game.deaths[targetName] ~= nil) then
 					player.vote = targetName
+					Server.saveGames()
 				end
 			end
 		end
@@ -308,6 +308,9 @@ function Server.joinGame(token, gameCode)
 			}
 			game.players[username] = p
 			game.playerCount = game.playerCount + 1
+			Server.accounts[username].currentGame = gameCode
+			Server.saveGames()
+			Server.saveAccount()
 			return true
 		end
 	end
@@ -345,13 +348,19 @@ function Server.startGame(token)
 		end
 		Server.gameTick(game)
 		game.timer = timer.performWithDelay(60000, function() Server.gameTick(game) end, -1)
+		Server.saveGames()
 		return true
 	end
 	return false
 end
 
 function Server.leaveGame(token)
-	Server.accounts[Server.tokens[token].username].currentGame = ""
+	local username = Server.tokens[token].username
+	local currentGame = Server.accounts[username].currentGame
+	Server.games[currentGame].players[username] = nil
+	Server.accounts[username].currentGame = ""
+	Server.saveGames()
+	Server.saveAccount()
 end
 
 function Server.getRemainingTime(token)
@@ -371,8 +380,10 @@ function Server.useSpecial(token, targetName)
 			if(role == "doctor") then
 				game.players[targetName].protected = true
 				player.usedAbility = true
+				Server.saveGames()
 			elseif(role == "detective") then
 				player.usedAbility = true
+				Server.saveGames()
 				return game.players[targetName].role
 			end
 		end
@@ -384,6 +395,7 @@ function Server.playerDied(token)
 	if(Server.validate(token)) then
 		local username = Server.tokens[token].username
 		Server.games[Server.accounts[username].currentGame].deaths[username] = true
+		Server.saveGames()
 	end
 end
 

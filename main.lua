@@ -11,6 +11,7 @@ local Account = require("Account")
 local Game = require("Game")
 
 local function refresh()
+	Account.refreshData()
 	if(Account.hasGame()) then
 		Game.refreshData()
 		composer.gotoScene("gameView")
@@ -29,13 +30,25 @@ end
 
 local function logout(event)
 	Account.logout()
-	 composer.gotoScene("loginView")
+	composer.gotoScene("loginView")
+end
+
+local function joinGame(event)
+	if(Game.joinGame(event.gameCode)) then
+		refresh()
+	else
+		native.showAlert("Invalid Game Code!", "The game code you entered is not valid!")
+	end
+end
+
+local function leaveGame()
+	Game.leaveGame()
+	refresh()
 end
 
 local function startup()
 	if(Account.validate()) then
 		refresh()
-		Account.refreshData()
 	else
 		composer.gotoScene("loginView")
 	end
@@ -57,6 +70,8 @@ Runtime:addEventListener("logout", logout)
 Runtime:addEventListener("refresh", refresh)
 Runtime:addEventListener("accountScreen", accountScreen)
 Runtime:addEventListener("back", back)
+Runtime:addEventListener("joinGame", joinGame)
+Runtime:addEventListener("leaveGame", leaveGame)
 
 composer.gotoScene("loadingView")
 timer.performWithDelay(100, startup, 1)

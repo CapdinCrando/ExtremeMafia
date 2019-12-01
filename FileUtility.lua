@@ -17,7 +17,7 @@ function FileUtility.saveTable(t, filename)
         return false
     else
         -- Write encoded JSON data to file
-        file:write( json.encode( t ) )
+        file:write( json.encode( t , { indent = true }) )
         -- Close the file handle
         io.close( file )
         return true

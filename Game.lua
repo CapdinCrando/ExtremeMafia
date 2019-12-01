@@ -5,7 +5,7 @@ Game = {}
 
 -- Retrieves and updates the game data
 function Game.refreshData()
-	Game.gameData = Server.getGameData(Account.getToken)
+	Game.gameData = Server.getGameData(Account.getToken())
 end
 
 function Game.getGameTitle()
@@ -29,7 +29,11 @@ function Game.died()
 end
 
 function Game.joinGame(gameCode)
+	return Server.joinGame(Account.getToken(), gameCode)
+end
 
+function Game.leaveGame()
+	Server.leaveGame(Account.getToken())
 end
 
 function Game.getPlayerRole(playerName)

@@ -126,7 +126,7 @@ function accountView:show( event )
         if(Account.hasGame()) then
         	self.leaveButton.isVisible = true
         else
-        	self.leaveButton.isVisible = true
+        	self.leaveButton.isVisible = false
         end
  
     elseif ( phase == "did" ) then
