@@ -16,8 +16,9 @@ end
 
 function Account.login(username, password)
 	local response = Server.login(username, password)
-	if(reponse ~= nil) then
+	if(response ~= nil) then
 		Account.token = response
+		FileUtility.saveTable(Account, accountFile)
 		return true
 	end
 	return false
@@ -54,8 +55,8 @@ function Account.refreshData()
 end
 
 function Account.logout()
-	--Invalidate
-	Account.token = ""
+	Server.invalidate(Account.token)
+	Account = {}
 	FileUtility.saveTable(Account, accountFile)
 end
 
