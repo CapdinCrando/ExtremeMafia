@@ -85,4 +85,4 @@ Runtime:addEventListener("leaveGame", leaveGame)
 
 --Inital view
 composer.gotoScene("loadingView")
-timer.performWithDelay(100, startup, 1)
+timer.performWithDelay(1000, startup, 1)
