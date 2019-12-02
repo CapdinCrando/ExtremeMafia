@@ -452,7 +452,7 @@ function Server.startDemo()
 	game.players["CapdinCrando"].role = "detective"
 	game.players["Max"].role = "doctor"
 	game.players["InigoMontoya"].role = "mafia"
-	game.players["TeckArcher"].role = "citizen"
+	game.players["NoobMaster"].role = "citizen"
 	game.currentPhase = "active"
 	game.currentRound = 1
 end

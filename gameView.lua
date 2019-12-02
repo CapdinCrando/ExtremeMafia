@@ -127,11 +127,11 @@ function gameView:show( event )
 			userText.y = rowHeight * 0.5
 			
 			if(gamePhase == "lobby") then
-				--print("lobby")
+				print("lobby")
 			else
 				local aliveText = display.newText(row, "", 0, 0, nil, 20)
 				local aText
-				if(player.isAlive) then
+				if(player.alive) then
 					aliveText.text = "Alive"
 					aliveText:setFillColor(0, 1, 0, 1)
 				else
@@ -139,14 +139,16 @@ function gameView:show( event )
 					aliveText:setFillColor(1, 0, 0, 1)
 				end
 				aliveText.anchorX = 0
-				aliveText.x = 40
+				aliveText.x = rowWidth - 115
 				aliveText.y = rowHeight * 0.5
 				if(gamePhase == "active") then
+					local user = Game.getPlayer()
+					print(user.role)
 					if(not player.usedAbility) then
-						if(player.role == "doctor") then
+						if(user.role == "doctor") then
 							-- Player is doctor
 							function saveButtonHandler(event)
-								--Game.useSpecial()
+								Game.useSpecial(player.displayName)
 								Runtime:dispatchEvent({name = "refresh"})
 								return true
 							end
@@ -161,10 +163,10 @@ function gameView:show( event )
 							saveButton.anchorX = 0
 							saveButton.x = rowWidth - saveButton.width - 15
 							saveButton.y = rowHeight * 0.5
-						elseif(player.role == "detective") then
+						elseif(user.role == "detective") then
 							-- Player is detective
 							function inspectButtonHandler(event)
-								--Game.useSpecial()
+								Game.useSpecial(player.displayName)
 								Runtime:dispatchEvent({name = "refresh"})
 								return true
 							end
@@ -300,6 +302,24 @@ function gameView:show( event )
 				self.phaseText.text = "Voting"
 			end
 		end
+		
+		-- Timer
+		local timeRemaining = Game.getMinutesRemaining()
+		local timerText = display.newText({
+			text = "Time Remaining: " .. timeRemaining .. "m",
+			y = gameTable.y + gameTable.height/2 + 20,
+			x = display.contentCenterX,
+			fontSize = 24
+		})
+		
+		-- Your Role
+		local user = Game.getPlayer()
+		local role = display.newText({
+			text = "You are " .. user.role,
+			y = gameTable.y + gameTable.height/2 + 50,
+			x = display.contentCenterX,
+			fontSize = 24
+		})
 	
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
