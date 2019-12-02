@@ -214,6 +214,7 @@ function gameView:show( event )
 				player.displayName .. " Role",
 				player.displayName .. " is " .. player.role
 			)
+			return true
 		end
 		local function gameTableListener(event)
 			return true
