@@ -209,7 +209,11 @@ function gameView:show( event )
 		local function onRowTouch(event)
 			-- event.phase == "press"
 			-- event.target.index == row touced
-			print("touch")
+			local player = event.row.params.player
+			native.showAlert(
+				player.displayName .. " Role",
+				player.displayName .. " is " .. player.role
+			)
 		end
 		local function gameTableListener(event)
 			return true
