@@ -187,7 +187,7 @@ function gameView:show( event )
 					-- If game phase is voting --------------------------------------------
 					-- Vote button (display as needed)
 					function voteButtonHandler(event)
-					print("***************" .. player.user)
+						print("***************" .. player.user)
 						Game.vote(player.user)
 						Runtime:dispatchEvent({name = "refresh"})
 						return true
