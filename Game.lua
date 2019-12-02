@@ -66,19 +66,24 @@ function Game.leaveGame()
 	Server.leaveGame(Account.getToken())
 end
 
---Gets the player's role
-function Game.getPlayerRole()
-	return Server.players[Account.getUsername()].role
+--Gets the winner of the game
+--If no winner, then blank string
+function Game.getWinner()
+	return Game.gameData.winner
 end
 
 --Gets the specified player's role
+--If nil then gets current player's role
 function Game.getPlayerRole(playerName)
-	return Server.players[playerName].role
+	if(playerName == nil) then
+		playerName = Account.getUsername()
+	end
+	return Game.gameData.players[playerName].role
 end
 
 --Gets the minutes remaining in the current phase
 function Game.getMinutesRemaining()
-	return Server.getRemainingTime(Account.getToken())
+	return Game.gameData.timeRemaining
 end
 
 --Sends the player's vote to the server
