@@ -74,7 +74,7 @@ end
 
 --Returns the current player object
 function Game.getPlayer()
-	return Game.gameData[Account.getUsername()]
+	return Game.gameData.player[Account.getUsername()]
 end
 
 --Gets the specified player's role
