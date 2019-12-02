@@ -134,6 +134,7 @@ function gameView:show( event )
 				if(gamePhase == "active") then
 					if(not player.usedAbility) then
 						if(player.role == "doctor") then
+							-- Player is doctor
 							function saveButtonHandler(event)
 								--Game.useSpecial()
 								Runtime:dispatchEvent({name = "refresh"})
@@ -151,6 +152,7 @@ function gameView:show( event )
 							saveButton.x = rowWidth - saveButton.width - 15
 							saveButton.y = rowHeight * 0.5
 						elseif(player.role == "detective") then
+							-- Player is detective
 							function inspectButtonHandler(event)
 								--Game.useSpecial()
 								Runtime:dispatchEvent({name = "refresh"})
