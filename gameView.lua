@@ -44,7 +44,7 @@ function gameView:create( event )
 	
 	--Start game button
 	local function startGame()
-		--Game.startGame()
+		Game.startDemo()
 		refresh()
 	end
 	local startButton = widget.newButton({
@@ -79,7 +79,17 @@ function gameView:create( event )
 	})
 	sceneGroup:insert(accountButton)
 	
-	--Account Icon
+	local function demo()
+		local gamePhase = Game.getPhase()
+		if(gamePhase == "active") then
+			Game.demoVoting()
+		elseif(gamePhase == "voting") then
+			Game.endDemo()
+		end
+		refresh()
+	end
+	
+	--Refresh Icon
 	local refreshButton = widget.newButton({
 		id = "refreshButton",
 		x = display.contentWidth - 40,
@@ -87,7 +97,7 @@ function gameView:create( event )
 		width = 40,
 		height = 40,
 		defaultFile = "refreshIcon.png",
-		onRelease = refresh,
+		onRelease = demo,
 	})
 	sceneGroup:insert(refreshButton)
 	

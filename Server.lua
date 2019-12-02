@@ -446,4 +446,30 @@ function Server.playerDied(token)
 	end
 end
 
+--------------Demo Functions----------------
+function Server.startDemo()
+	local game = Server.games["ABCD"]
+	game.players["CapdinCrando"].role = "detective"
+	game.players["Max"].role = "doctor"
+	game.players["InigoMontoya"].role = "mafia"
+	game.players["TeckArcher"].role = "citizen"
+	game.currentPhase = "active"
+	game.currentRound = 1
+end
+
+function Server.demoVoting()
+	local game = Server.games["ABCD"]
+	game.players["NoobMaster"].alive = false
+	game.currentPhase = "voting"
+end
+
+function Server.endDemo()
+	local game = Server.games["ABCD"]
+	game.players["InigoMontoya"].alive = false
+	game.winner = "citizens"
+	
+	local account = Server.accounts["CapdinCrando"]
+	account.wins = account.wins + 1
+end
+
 return Server

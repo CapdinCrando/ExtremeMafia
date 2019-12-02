@@ -96,4 +96,17 @@ function Game.createGame(title, gameSettings)
 	return Server.createGame(Account.getToken(), title, gameSettings)
 end
 
+----------Demo Functions----------
+function Game.startDemo()
+	Server.startDemo()
+end
+
+function Game.demoVoting()
+	Server.demoVoting()
+end
+
+function Game.endDemo()
+	Server.endDemo()
+end
+
 return Game
