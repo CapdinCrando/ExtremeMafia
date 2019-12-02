@@ -45,6 +45,7 @@ function gameView:create( event )
 		userText.x = 15
 		userText.y = rowHeight * 0.5
 		
+		-- If game phase is voting --------------------------------------------
 		-- Vote button (display as needed)
 		function voteButtonHandler(event)
 			return true
@@ -70,7 +71,15 @@ function gameView:create( event )
 			voteCount.y = rowHeight * 0.5
 		end
 		
-		print("render")
+		-- If game phase is active --------------------------------------------
+		-- Alive or dead state (currently tries to use a nil value, commented out
+		--[[
+		local playerState = display.newText(row, event.row.params.state, 0, 0, nil, 15)
+		playerState.anchorX = 0
+		playerState.x = rowWidth - playerState.width - 15
+		playerState.y = rowHeight * 0.5
+		]]
+		
 	end
 	local function onRowUpdate(event)
 		-- event.row
@@ -97,7 +106,7 @@ function gameView:create( event )
 		onRowTouch = onRowTouch
 	})
 	
-	-- Populate table		table.remove(sceneGroup, table.indexOf(sceneGroup, item));
+	-- Populate table
 	local players = Game.getPlayers()
 	for _, item in pairs(players) do
 		gameTable:insertRow({--item.displayName,
