@@ -209,32 +209,34 @@ function gameView:show( event )
 				elseif(gamePhase == "voting") then
 					-- If game phase is voting --------------------------------------------
 					-- Vote button (display as needed)
-					function voteButtonHandler(event)
-					print("***************" .. player.user)
-						Game.vote(player.user)
-						Runtime:dispatchEvent({name = "refresh"})
-						return true
-					end
-					local voteButton = widget.newButton({
-						onEvent = voteButtonHandler,
-						width = 50,
-						height = 25,
-						defaultFile = "vote_default.png",
-						overFile = "vote_over.png",
-					})
-					row:insert(voteButton)
-					voteButton.anchorX = 0
-					voteButton.x = rowWidth - voteButton.width - 15
-					voteButton.y = rowHeight * 0.5
-					
-					-- Vote count (display as needed)
-					if (event.row.params.votes ~= nil) then
-						local voteCount = display.newText(row, event.row.params.votes, 0, 0, nil, 20)	
-						voteCount:setFillColor(245/255, 245/255, 245/255)
-		
-						voteCount.anchorX = 0
-						voteCount.x = voteButton.x - 15
-						voteCount.y = rowHeight * 0.5
+					if(Game.getWinner() == "") then
+						function voteButtonHandler(event)
+						--print("***************" .. player.user)
+							Game.vote(player.user)
+							Runtime:dispatchEvent({name = "refresh"})
+							return true
+						end
+						local voteButton = widget.newButton({
+							onEvent = voteButtonHandler,
+							width = 50,
+							height = 25,
+							defaultFile = "vote_default.png",
+							overFile = "vote_over.png",
+						})
+						row:insert(voteButton)
+						voteButton.anchorX = 0
+						voteButton.x = rowWidth - voteButton.width - 15
+						voteButton.y = rowHeight * 0.5
+						
+						-- Vote count (display as needed)
+						if (event.row.params.votes ~= nil) then
+							local voteCount = display.newText(row, event.row.params.votes, 0, 0, nil, 20)		
+							voteCount:setFillColor(245/255, 245/255, 245/255)
+			
+							voteCount.anchorX = 0
+							voteCount.x = voteButton.x - 15
+							voteCount.y = rowHeight * 0.5
+						end
 					end
 				end
 			end
