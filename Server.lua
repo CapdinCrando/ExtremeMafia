@@ -419,8 +419,8 @@ end
 function Server.useSpecial(token, targetName)
 	if(Server.validate(token)) then
 		local username = Server.tokens[token].username
-		local player = game.players[username]
 		local game = Server.games[Server.accounts[username].currentGame]
+		local player = game.players[username]
 		local role = game.players[username].role
 		if(player.usedAbility == false) then
 			if(role == "doctor") then
