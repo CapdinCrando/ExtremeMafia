@@ -72,6 +72,11 @@ function Game.getWinner()
 	return Game.gameData.winner
 end
 
+--Returns the current player object
+function Game.getPlayer()
+	return Game.gameData[Account.getUsername()]
+end
+
 --Gets the specified player's role
 --If nil then gets current player's role
 function Game.getPlayerRole(playerName)
