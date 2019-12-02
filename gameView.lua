@@ -101,6 +101,29 @@ function gameView:create( event )
 	})
 	sceneGroup:insert(refreshButton)
 	
+	
+	-- Timer
+	local text1 = display.newText({
+		text = "",
+		y = display.contentHeight/2 + 120,
+		x = display.contentWidth/2,
+		fontSize = 24
+	})
+	text1.isVisible = false
+	self.text1 = text1
+	sceneGroup:insert(text1)
+	
+	-- Your Role
+	local user = Game.getPlayer()
+	local text2 = display.newText({
+		text = "",
+		y = display.contentHeight/2 + 150,
+		x = display.contentWidth/2 - 25,
+		fontSize = 24
+	})
+	text2.isVisible = false
+	self.text2 = text2
+	sceneGroup:insert(text2)
 end
 
 function gameView:show( event )
@@ -264,6 +287,8 @@ function gameView:show( event )
 			else
 				self.startButton.isVisible = false
 			end
+			self.text1.isVisible = false
+			self.text2.isVisible = false
 		else
 			--Game has been started
 			self.startButton.isVisible = false
@@ -273,6 +298,16 @@ function gameView:show( event )
 				--TIME REMAINING
 				--IF ALIVE: I DIED BUTTON
 				
+			self.text1.isVisible = true
+			self.text2.isVisible = true
+			local winner = Game.getWinner()
+			if(winner ~= "") then -- winner
+				self.text1.text = "GAME OVER!"
+				self.text2.text = "Winner: "..winner
+			else
+				self.text1.text = "Time Remaining: "..Game.getMinutesRemaining() .. " minutes"
+				self.text2.text = "Your Role: "..Game.getPlayer().role
+			end
 			--Picture
 			local options = {
 				width = 150,
@@ -293,7 +328,7 @@ function gameView:show( event )
 				roleIcon = display.newImageRect(sheet, 3, 60, 132)
 			end
 			roleIcon.x = 275
-			roleIcon.y = 20
+			roleIcon.y = display.contentHeight - 50
 			sceneGroup:insert(roleIcon)
 			
 			if(gamePhase == "active") then
@@ -303,23 +338,6 @@ function gameView:show( event )
 			end
 		end
 		
-		-- Timer
-		local timeRemaining = Game.getMinutesRemaining()
-		local timerText = display.newText({
-			text = "Time Remaining: " .. timeRemaining .. "m",
-			y = gameTable.y + gameTable.height/2 + 20,
-			x = display.contentCenterX,
-			fontSize = 24
-		})
-		
-		-- Your Role
-		local user = Game.getPlayer()
-		local role = display.newText({
-			text = "You are " .. user.role,
-			y = gameTable.y + gameTable.height/2 + 50,
-			x = display.contentCenterX,
-			fontSize = 24
-		})
 	
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
