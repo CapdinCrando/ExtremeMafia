@@ -171,7 +171,7 @@ function gameView:show( event )
 						if(user.role == "doctor") then
 							-- Player is doctor
 							function saveButtonHandler(event)
-								Game.useSpecial(player.displayName)
+								Game.useSpecial(player.user)
 								Runtime:dispatchEvent({name = "refresh"})
 								return true
 							end
@@ -189,7 +189,7 @@ function gameView:show( event )
 						elseif(user.role == "detective") then
 							-- Player is detective
 							function inspectButtonHandler(event)
-								Game.useSpecial(player.displayName)
+								Game.useSpecial(player.user)
 								Runtime:dispatchEvent({name = "refresh"})
 								return true
 							end
@@ -210,7 +210,8 @@ function gameView:show( event )
 					-- If game phase is voting --------------------------------------------
 					-- Vote button (display as needed)
 					function voteButtonHandler(event)
-						Game.vote()
+					print("***************" .. player.user)
+						Game.vote(player.user)
 						Runtime:dispatchEvent({name = "refresh"})
 						return true
 					end
@@ -270,7 +271,8 @@ function gameView:show( event )
 		
 		-- Populate table
 		local players = Game.getPlayers()
-		for _, item in pairs(players) do
+		for key, item in pairs(players) do
+			item.user = key
 			gameTable:insertRow({--item.displayName,
 				rowHeight = 40,
 				rowColor = { default = { 0.5, 0.5, 0.5 }, over = { 1, 0, 0 } },
