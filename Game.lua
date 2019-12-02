@@ -93,7 +93,7 @@ end
 
 --Sends the player's vote to the server
 function Game.vote(targetName)
-	Server.vote(Account.getToken(), targetname)
+	Server.vote(Account.getToken(), targetName)
 end
 
 --Creates a new game from the given settings
